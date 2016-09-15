@@ -1,8 +1,16 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:show, :edit, :update, :destroy]
+  before_action :need_same_id, only: [:edit, :update, :destroy]
 
   # GET /tweets
   # GET /tweets.json
+
+  def need_same_id
+    if current_user.id != Tweet.find(params[:id]).user_id
+      redirect_to root_path
+    end
+  end
+
   def index
     @tweets = Tweet.all
   end
